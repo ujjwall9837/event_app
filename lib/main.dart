@@ -1,9 +1,7 @@
-import 'package:assignment01135/details.dart';
+import 'package:assignment01135/data.dart';
 import 'package:assignment01135/event.dart';
 import 'package:assignment01135/firebase_options.dart';
-import 'package:assignment01135/login.dart';
 
-import 'package:assignment01135/scanner.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -23,7 +21,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: LoginPage(),
+      home: DataPage(
+        displayname: 'ujjwal',
+      ),
     );
   }
 }

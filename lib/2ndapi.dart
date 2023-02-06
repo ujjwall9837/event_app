@@ -1,52 +1,55 @@
-import 'package:assignment01135/2ndapi.dart';
+import 'dart:convert';
 import 'package:assignment01135/button.dart';
 import 'package:assignment01135/constant.dart';
 import 'package:assignment01135/shared.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'dart:convert';
 
-class Event {
+import 'package:flutter/material.dart';
+import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter/src/widgets/placeholder.dart';
+
+class Event1 {
   String createdat;
   String name;
+  String duration;
   String category;
-  String lesson;
+  String locked;
   String id;
 
-  Event(
+  Event1(
     this.createdat,
     this.name,
     this.category,
-    this.lesson,
+    this.locked,
+    this.duration,
     this.id,
   );
-
   String toString() {
-    return "createdat : $createdat, name : $name , category :$category , lesson : $lesson , id : $id";
+    return "createdat : $createdat, name : $name , category :$category , locked: $locked , duration: $duration , id : $id";
   }
 }
 
-class DataPage extends StatefulWidget {
+class SecondPage extends StatefulWidget {
   String displayname;
-  DataPage({
+  SecondPage({
     required this.displayname,
   });
 
   @override
-  State<DataPage> createState() => _DataPageState();
+  State<SecondPage> createState() => _SecondPageState();
 }
 
 List data = [];
 
-class _DataPageState extends State<DataPage> {
+class _SecondPageState extends State<SecondPage> {
   List<bool> optionSelected = [true, false, false];
   void fetchCoin() async {
+    List<Event1> event = [];
     Map<String, String> requestHeaders = {
       'Content-type': 'application/json',
     };
     final response = await http.get(
-        Uri.parse('https://632017e19f82827dcf24a655.mockapi.io/api/programs'),
+        Uri.parse('https://632017e19f82827dcf24a655.mockapi.io/api/lessons'),
         headers: requestHeaders);
 
     var body = json.decode(response.body)['items'];
@@ -87,7 +90,7 @@ class _DataPageState extends State<DataPage> {
           ),
         ),
         title: Text(
-          ' Welcome ',
+          ' Heyy User ',
           style: TextStyle(color: Colors.black),
         ),
         actions: [
@@ -148,18 +151,8 @@ class _DataPageState extends State<DataPage> {
             SizedBox(
               height: 10,
             ),
-            signInButton(context, () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => SecondPage(
-                    displayname: widget.displayname,
-                  ),
-                ),
-              );
-            }, 'Move To 2nd API'),
             Container(
-              child: Icon(Icons.turn_right),
+              child: buildTextTitleVariation1("Thank You For Visiting"),
             )
           ],
         ),
@@ -208,14 +201,15 @@ class _DataPageState extends State<DataPage> {
   }
 }
 
-List<Event> getEvents() {
-  return <Event>[
+List<Event1> getEvents() {
+  return <Event1>[
     for (int i = 0; i < data.length; i++)
-      Event(
+      Event1(
         data[i]['createdAt'].toString(),
         data[i]['name'].toString(),
+        data[i]['duration'].toString(),
         data[i]['category'].toString(),
-        data[i]['lesson'].toString(),
+        data[i]['locked'].toString(),
         data[i]['id'].toString(),
       ),
   ];
@@ -229,7 +223,7 @@ List<Widget> buildEvents() {
   return list;
 }
 
-Widget buildEvent(Event event, int index) {
+Widget buildEvent(Event1 event, int index) {
   return GestureDetector(
     onTap: () {},
     child: Container(
@@ -257,6 +251,9 @@ Widget buildEvent(Event event, int index) {
                   Container(
                     child: buildTextSubTitleVariation2(event.createdat),
                   ),
+                  Container(
+                    child: buildTextSubTitleVariation1(event.locked),
+                  ),
                   Icon(
                     Icons.museum,
                     size: 100,
@@ -269,7 +266,7 @@ Widget buildEvent(Event event, int index) {
             height: 8,
           ),
           buildEventTitle(event.name),
-          buildTextSubTitleVariation2(event.lesson),
+          buildTextSubTitleVariation2(event.duration),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
